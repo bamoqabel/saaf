@@ -20,6 +20,7 @@ class CustomerSalesperonsReport(models.TransientModel):
     company_id = fields.Many2one('res.company', 'شركة', required=True, default=lambda self: self.env.company)
     user_ids = fields.Many2many('res.users', string='مندوب',relation="user_ids_rel", column1="user_ids_col1",column2="user_ids_col2")
     customer_ids = fields.Many2many('res.partner', string='عميل',relation="customer_id_rel", column1="customer_id_col1",column2="customer_id_col2")
+    company_type = fields.Selection(string="النوع", selection=[('individual', 'أفراد'), ('company', 'شركات'), ], required=False, )
 
     @api.constrains("date_from", "date_to")
     def _check_dates(self):
@@ -34,6 +35,13 @@ class CustomerSalesperonsReport(models.TransientModel):
         data_list_person = []
         so_domain = [('state', 'in', ('sale', 'done')),('company_id','=',self.company_id.id),]
 
+        is_company,is_individual = False,False
+        if self.company_type and self.company_type == 'company' :
+            is_company = True
+        if self.company_type and self.company_type == 'individual':
+            is_individual = True
+        if not self.company_type:
+            is_company, is_individual = True, True
         if self.customer_ids:
             customers = self.customer_ids
         else:
@@ -41,26 +49,23 @@ class CustomerSalesperonsReport(models.TransientModel):
         if self.user_ids:
             so_domain.append(('user_id', 'in', self.user_ids.ids),)
         for customer in customers :
-            print("customer",customer.name)
             so_domain.append(('partner_id', '=', customer.id),)
-            print("so_domain",so_domain)
             so_records = self.env['sale.order'].sudo().search(so_domain)
             for so in so_records:
-                print("so", so.name)
                 container_counter = 0.0
                 containers ,service_numbers,delivery_addresses = '','',''
                 invoice_ids = self.env['account.move'].sudo().search([('id','in',so.invoice_ids.ids)],limit=1)
                 picking_ids = self.env['stock.picking'].sudo().search([('id','in',so.picking_ids.ids),])
                 for picking in picking_ids:
+                    if picking.container_id:
+                        container_counter += len(picking.container_id)
                     for container in picking.container_id:
-                        container_counter += 1
-                    for container in picking.container_id:
-                        containers += container.number + '/' +  container.name + ' , '
+                        containers += container.number + '/' + container.name + ' , '
                     if picking.service_number:
                         service_numbers += picking.service_number + ' , '
                     if picking.partner_id:
                         delivery_addresses += picking.partner_id.display_name + ' , '
-                if customer.is_company == True:
+                if is_company and customer.is_company == True:
                     data_list_company.append({
                         'customer': so.partner_id.display_name,
                         'container_counter': container_counter,
@@ -71,7 +76,7 @@ class CustomerSalesperonsReport(models.TransientModel):
                         'inv_total': invoice_ids.amount_total if invoice_ids else 0,
                         'amount_residual': invoice_ids.amount_residual if invoice_ids else 0,
                     })
-                else:
+                elif is_individual and customer.is_company == False:
                     data_list_person.append({
                         'customer': so.partner_id.display_name,
                         'container_counter': container_counter,

@@ -30,10 +30,11 @@ class CustomerDeliveryReport(models.TransientModel):
 
     @api.constrains("date_from", "date_to")
     def _check_dates(self):
-        if self.date_from > self.date_to:
-            raise Warning(_('Date From Cannot Be Greater Than Date TO!'))
-        if self.date_to > date.today():
-            raise Warning(_('Date To Cannot Exceed Today!'))
+        if self.date_from and self.date_to:
+            if self.date_from > self.date_to:
+                raise Warning(_('Date From Cannot Be Greater Than Date TO!'))
+            if self.date_to > date.today():
+                raise Warning(_('Date To Cannot Exceed Today!'))
 
     def print_delivery_customer_excel_report(self):
         self.ensure_one()
