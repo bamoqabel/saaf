@@ -28,5 +28,6 @@
         'views/stock.xml',
         'views/sale.xml',
         'reports/customer_delivery_report.xml',
+        'reports/customers_and_salespersons_moves.xml',
     ],
 }

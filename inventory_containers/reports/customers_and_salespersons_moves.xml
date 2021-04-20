@@ -1,0 +1,229 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="customers_salespersons_moves_report_template_pdf_report">
+        <t t-call="web.html_container">
+            <t t-call="web.external_layout">
+                <link href="https://fonts.googleapis.com/css2?family=Markazi+Text:wght@500&amp;display=swap"
+                      rel="stylesheet"/>
+                <div class="page" style="font-family: 'Markazi Text', serif;">
+                    <t t-foreach="filters" t-as="f">
+                        <center>
+                            <h3>
+                                <span t-esc="f['name']"/>
+                            </h3>
+                        </center>
+                        <br/>
+                        <div style='border-top: 1px solid #CCC;margin:5px 2px 0px 2px;font-size: 18px;' class="row mt-2 pt-2 pl-0">
+                            <div class="col-12">
+                                <div class="row pl-0">
+                                    <div class="col-2 pl-0">
+                                        <span class="font-weight-bold">من</span>
+                                    </div>
+                                    <div class="col-4">
+                                        <b>
+                                            <span class="pr-3">:</span>
+                                        </b>
+                                        <span t-esc="f['date_from']"/>
+                                    </div>
+                                    <div class="col-2 pl-0">
+                                        <span class="font-weight-bold">إلى</span>
+                                    </div>
+                                    <div class="col-4">
+                                        <b>
+                                            <span class="pr-3">:</span>
+                                        </b>
+                                        <span t-esc="f['date_to']"/>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-2 pl-0">
+                                        <span class="font-weight-bold">شركة</span>
+                                    </div>
+                                    <div class="col-4">
+                                        <b>
+                                            <span class="pr-3">:</span>
+                                        </b>
+                                        <span t-esc="f['company_id']"/>
+                                    </div>
+                                    <div class="col-2 pl-0">
+                                        <span class="font-weight-bold">العملاء</span>
+                                    </div>
+                                    <div class="col-4">
+                                        <b>
+                                            <span class="pr-3">:</span>
+                                        </b>
+                                        <span t-esc="f['customer_ids']"/>
+                                    </div>
+                                </div>
+                                <div class="row">
+
+                                    <div class="col-2 pl-0">
+                                        <span class="font-weight-bold">مناديب</span>
+                                    </div>
+                                    <div class="col-4">
+                                        <b>
+                                            <span class="pr-3">:</span>
+                                        </b>
+                                        <span t-esc="f['user_ids']"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                    <t t-set="counter_so_total" t-value="0"/>
+                    <t t-set="counter_inv_total" t-value="0"/>
+                    <t t-set="counter_amount_residual" t-value="0"/>
+                    <table class="table table-sm o_main_table mt-4">
+                        <thead style="border: 2px solid;">
+                            <tr>
+                                <th class="text-left" style="width:20%;font-size:13px;">العميل</th>
+                                <th class="text-left" style="width:7%;font-size:13px;">عدد الحاويات</th>
+                                <th class="text-left" style="width:25%;font-size:13px;">رقم الحاوية</th>
+                                <th class="text-left" style="width:18%;font-size:13px;">رقم كرت الخدمة</th>
+                                <th class="text-left" style="width:15%;font-size:13px;">الموقع</th>
+                                <th class="text-left" style="width:5%;font-size:13px;">المبلغ</th>
+                                <th class="text-left" style="width:5%;font-size:13px;">مبلغ الفاتورة</th>
+                                <th class="text-left" style="width:5%;font-size:13px;">السداد</th>
+                            </tr>
+                        </thead>
+                        <tbody class="sale_tbody">
+                            <tr t-if="data_list_person" style="border: 2px solid;">
+                                <td colspan="8" scope="colgroup" style="font-weight:bold;text-align:center;">أفراد</td>
+                            </tr>
+                            <tr t-foreach="data_list_person" t-as="line">
+                                <td style="font-weight:bold;">
+                                    <t t-esc="line['customer']"/>
+                                </td>
+                                <td style="font-weight:bold;">
+                                    <t t-esc="line['container_counter']"/>
+                                </td>
+                                <td style="font-weight:bold;">
+                                    <t t-esc="line['containers']"/>
+                                </td>
+                                <td style="font-weight:bold;">
+                                    <t t-esc="line['service_numbers']"/>
+                                </td>
+                                <td style="font-weight:bold;">
+                                    <t t-esc="line['delivery_addresses']"/>
+                                </td>
+                                <td style="font-weight:bold;">
+                                    <t t-esc="line['so_total']"/>
+                                    <t t-set="counter_so_total" t-value="line['so_total'] + counter_so_total"/>
+                                </td>
+                                <td style="font-weight:bold;">
+                                    <t t-esc="line['inv_total']"/>
+                                    <t t-set="counter_inv_total" t-value="line['inv_total'] + counter_inv_total"/>
+                                </td>
+                                <td style="font-weight:bold;">
+                                    <t t-esc="line['amount_residual']"/>
+                                    <t t-set="counter_amount_residual" t-value="line['amount_residual'] + counter_amount_residual"/>
+                                </td>
+                            </tr>
+                            <tr t-if="data_list_company" style="border: 2px solid;">
+                                <td colspan="8" scope="colgroup" style="font-weight:bold;text-align:center;">شركات</td>
+                            </tr>
+                            <tr t-foreach="data_list_company" t-as="line">
+                                <td style="font-weight:bold;">
+                                    <t t-esc="line['customer']"/>
+                                </td>
+                                <td style="font-weight:bold;">
+                                    <t t-esc="line['container_counter']"/>
+                                </td>
+                                <td style="font-weight:bold;">
+                                    <t t-esc="line['containers']"/>
+                                </td>
+                                <td style="font-weight:bold;">
+                                    <t t-esc="line['service_numbers']"/>
+                                </td>
+                                <td style="font-weight:bold;">
+                                    <t t-esc="line['delivery_addresses']"/>
+                                </td>
+                                <td style="font-weight:bold;">
+                                    <t t-esc="line['so_total']"/>
+                                    <t t-set="counter_so_total" t-value="line['so_total'] + counter_so_total"/>
+                                </td>
+                                <td style="font-weight:bold;">
+                                    <t t-esc="line['inv_total']"/>
+                                    <t t-set="counter_inv_total" t-value="line['inv_total'] + counter_inv_total"/>
+                                </td>
+                                <td style="font-weight:bold;">
+                                    <t t-esc="line['amount_residual']"/>
+                                    <t t-set="counter_amount_residual" t-value="line['amount_residual'] + counter_amount_residual"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="border: 2px solid;font-weight:bold;font-size:16px;text-align:center;" colspan="5" scope="colgroup">إجمالي</td>
+                                <td style="border: 2px solid;font-weight:bold;font-size:16px;" colspan="1" scope="colgroup"><span t-esc="round(counter_so_total,2)"/></td>
+                                <td style="border: 2px solid;font-weight:bold;font-size:16px;" colspan="1" scope="colgroup"><span t-esc="round(counter_inv_total,2)"/></td>
+                                <td style="border: 2px solid;font-weight:bold;font-size:16px;" colspan="1" scope="colgroup"><span t-esc="round(counter_amount_residual,2)"/></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </t>
+        </t>
+    </template>
+
+    <report
+            id="customers_salespersons_moves_report_template_id"
+            model="customers.salespersons.moves.report"
+            string="حركات العملاء بالمناديب"
+            report_type="qweb-pdf"
+            name="inventory_containers.customers_salespersons_moves_report_template_pdf_report"
+            file="inventory_containers.customers_salespersons_moves_report_template_pdf_report"
+            menu="False"
+    />
+
+    <record id="customers_salespersons_moves_report_form_view" model="ir.ui.view">
+        <field name="name">customers.salespersons.moves.report.form.view</field>
+        <field name="model">customers.salespersons.moves.report</field>
+        <field name="arch" type="xml">
+            <form string="Sales By Customer and Item Report">
+                <div class="oe_clear">
+                    <group>
+                        <group>
+                            <field name="name" required="1"/>
+                        </group>
+                        <group/>
+                    </group>
+                    <group>
+                        <group>
+                            <field name="date_from"/>
+                        </group>
+                        <group>
+                            <field name="date_to"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group>
+                            <field name="company_id" groups="base.group_multi_company"
+                                   options="{'no_create': True, 'no_open': True}"/>
+                            <field name="customer_ids" widget="many2many_tags"
+                                   options="{'no_create': True, 'no_open': True}"/>
+                        </group>
+                        <group>
+                            <field name="user_ids" widget="many2many_tags"
+                                   options="{'no_create': True, 'no_open': True}"/>
+                        </group>
+                    </group>
+                </div>
+                <footer>
+                    <button name="print_customers_salespersons_moves_report_pdf_report" type="object" string="طباعة"
+                            class="oe_highlight" style="float:right;"/>
+                    <button string="إلغاء" special="cancel" class="btn btn-secondary" style="float:left;"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="customers_salespersons_moves_report_action" model="ir.actions.act_window">
+        <field name="name">حركات العملاء بالمناديب</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">customers.salespersons.moves.report</field>
+        <field name="target">new</field>
+        <field name="view_mode">form</field>
+    </record>
+
+    <menuitem action="customers_salespersons_moves_report_action" id="menu_customers_salespersons_moves_report"
+              parent="sale.menu_sale_report" sequence="10"/>
+</odoo>
