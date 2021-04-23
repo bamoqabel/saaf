@@ -166,7 +166,7 @@
                                 </td>
                             </tr>
                             <tr>
-                                <td style="border: 2px solid;font-weight:bold;font-size:16px;text-align:center;" colspan="6" scope="colgroup">إجمالي</td>
+                                <td style="border: 2px solid;font-weight:bold;font-size:16px;text-align:center;" colspan="7" scope="colgroup">إجمالي</td>
                                 <td style="border: 2px solid;font-weight:bold;font-size:16px;" colspan="1" scope="colgroup"><span t-esc="round(counter_so_total,2)"/></td>
                                 <td style="border: 2px solid;font-weight:bold;font-size:16px;" colspan="1" scope="colgroup"><span t-esc="round(counter_inv_total,2)"/></td>
                                 <td style="border: 2px solid;font-weight:bold;font-size:16px;" colspan="1" scope="colgroup"><span t-esc="round(counter_amount_residual,2)"/></td>
