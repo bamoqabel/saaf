@@ -56,10 +56,13 @@ class StockPicking(models.Model):
     def related_service_number(self):
         for rec in self:
             if rec.service_number:
-                for inv in rec.sale_id.invoice_ids:
-                    inv.ref = rec.service_number
-                for so in rec.sale_id:
-                    so.service_number = rec.service_number
+                if rec.sale_id:
+                    picking_ids = self.env['stock.picking'].sudo().search([('id', 'in', rec.sale_id.picking_ids.ids)])
+                    if picking_ids and any(picking_ids.mapped('service_number')):
+                        service_number = ', '.join(pick.service_number for pick in picking_ids if pick.service_number)
+                        rec.sale_id.service_number = service_number
+                        for inv in rec.sale_id.invoice_ids:
+                            inv.ref = service_number
 
 
 
