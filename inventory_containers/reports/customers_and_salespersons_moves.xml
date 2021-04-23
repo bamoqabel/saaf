@@ -89,8 +89,8 @@
                             </tr>
                         </thead>
                         <tbody class="sale_tbody">
-                            <tr t-if="data_list_person" style="border: 2px solid;">
-                                <td colspan="10" scope="colgroup" style="font-weight:bold;text-align:center;">أفراد</td>
+                            <tr t-if="data_list_person" style="border: 2px solid;;">
+                                <td colspan="10" scope="colgroup" style="font-weight:bold;text-align:center;border-top: 2px solid;">أفراد</td>
                             </tr>
                             <tr t-foreach="data_list_person" t-as="line">
                                 <td style="font-weight:bold;">
@@ -128,7 +128,7 @@
                                 </td>
                             </tr>
                             <tr t-if="data_list_company" style="border: 2px solid;">
-                                <td colspan="10" scope="colgroup" style="font-weight:bold;text-align:center;">شركات</td>
+                                <td colspan="10" scope="colgroup" style="font-weight:bold;text-align:center;border-top: 2px solid;">شركات</td>
                             </tr>
                             <tr t-foreach="data_list_company" t-as="line">
                                 <td style="font-weight:bold;">
