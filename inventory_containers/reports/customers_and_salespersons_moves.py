@@ -54,7 +54,7 @@ class CustomerSalesperonsReport(models.TransientModel):
             for so in so_records:
                 container_counter = 0.0
                 containers ,service_numbers,delivery_addresses = '','',''
-                invoice_ids = self.env['account.move'].sudo().search([('id','in',so.invoice_ids.ids)],limit=1).filtered(lambda move : move.state != 'cancel')
+                invoice_ids = self.env['account.move'].sudo().search([('id','in',so.invoice_ids.ids)],limit=1).filtered(lambda move : move.state == 'posted')
                 picking_ids = self.env['stock.picking'].sudo().search([('id','in',so.picking_ids.ids),])
                 for picking in picking_ids:
                     if picking.container_id:
