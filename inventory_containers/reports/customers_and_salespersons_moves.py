@@ -50,11 +50,11 @@ class CustomerSalesperonsReport(models.TransientModel):
             so_domain.append(('user_id', 'in', self.user_ids.ids),)
         for customer in customers :
             so_domain.append(('partner_id', '=', customer.id),)
-            so_records = self.env['sale.order'].sudo().search(so_domain)
+            so_records = self.env['sale.order'].sudo().search(so_domain).filtered(lambda so_rec: sum(so_line.product_uom_qty for so_line in so_rec.order_line) > 0)
             for so in so_records:
                 container_counter = 0.0
                 containers ,service_numbers,delivery_addresses = '','',''
-                invoice_ids = self.env['account.move'].sudo().search([('id','in',so.invoice_ids.ids)],limit=1)
+                invoice_ids = self.env['account.move'].sudo().search([('id','in',so.invoice_ids.ids)],limit=1).filtered(lambda move : move.state != 'cancel')
                 picking_ids = self.env['stock.picking'].sudo().search([('id','in',so.picking_ids.ids),])
                 for picking in picking_ids:
                     if picking.container_id:
@@ -68,6 +68,7 @@ class CustomerSalesperonsReport(models.TransientModel):
                 if is_company and customer.is_company == True:
                     data_list_company.append({
                         'customer': so.partner_id.display_name,
+                        'customer_mobile': so.partner_id.mobile,
                         'container_counter': container_counter,
                         'containers': containers,
                         'service_numbers': service_numbers,
@@ -79,6 +80,7 @@ class CustomerSalesperonsReport(models.TransientModel):
                 elif is_individual and customer.is_company == False:
                     data_list_person.append({
                         'customer': so.partner_id.display_name,
+                        'customer_mobile': so.partner_id.mobile,
                         'container_counter': container_counter,
                         'containers': containers,
                         'service_numbers': service_numbers,
