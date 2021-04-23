@@ -69,6 +69,7 @@ class CustomerSalesperonsReport(models.TransientModel):
                     data_list_company.append({
                         'customer': so.partner_id.display_name,
                         'customer_mobile': so.partner_id.mobile,
+                        'so_number': so.name,
                         'container_counter': container_counter,
                         'containers': containers,
                         'service_numbers': service_numbers,
@@ -81,6 +82,7 @@ class CustomerSalesperonsReport(models.TransientModel):
                     data_list_person.append({
                         'customer': so.partner_id.display_name,
                         'customer_mobile': so.partner_id.mobile,
+                        'so_number': so.name,
                         'container_counter': container_counter,
                         'containers': containers,
                         'service_numbers': service_numbers,
