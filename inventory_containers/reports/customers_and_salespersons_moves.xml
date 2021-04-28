@@ -226,6 +226,7 @@
                             <field name="user_ids" widget="many2many_tags"
                                    options="{'no_create': True, 'no_open': True}"/>
                             <field name="company_type"/>
+                            <field name="is_amount_due"/>
                         </group>
                     </group>
                 </div>

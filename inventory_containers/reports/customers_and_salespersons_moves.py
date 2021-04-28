@@ -21,6 +21,7 @@ class CustomerSalesperonsReport(models.TransientModel):
     user_ids = fields.Many2many('res.users', string='مندوب',relation="user_ids_rel", column1="user_ids_col1",column2="user_ids_col2")
     customer_ids = fields.Many2many('res.partner', string='عميل',relation="customer_id_rel", column1="customer_id_col1",column2="customer_id_col2")
     company_type = fields.Selection(string="النوع", selection=[('individual', 'أفراد'), ('company', 'شركات'), ], required=False, )
+    is_amount_due = fields.Boolean(string="طلبات وفواتير مستحقة")
 
     @api.constrains("date_from", "date_to")
     def _check_dates(self):
@@ -54,6 +55,7 @@ class CustomerSalesperonsReport(models.TransientModel):
             for so in so_records:
                 container_counter = 0.0
                 containers ,service_numbers,delivery_addresses,delivery_date = '','','',''
+                passed = False
                 invoice_ids = self.env['account.move'].sudo().search([('id','in',so.invoice_ids.ids)],limit=1).filtered(lambda move : move.state == 'posted')
                 picking_ids = self.env['stock.picking'].sudo().search([('id','in',so.picking_ids.ids),])
                 for picking in picking_ids:
@@ -69,7 +71,12 @@ class CustomerSalesperonsReport(models.TransientModel):
                         delivery_date += str(picking.scheduled_date.date()) + ' , '
 
                 if is_company and customer.is_company == True:
-                    if not invoice_ids or invoice_ids.amount_residual != 0:
+                    # if self.is_amount_due :
+                    #     if not invoice_ids or invoice_ids.amount_residual != 0:
+                    #         passed = True
+                    # else:
+                    #     passed = True
+                    # if passed :
                         data_list_company.append({
                             'customer': so.partner_id.display_name,
                             'customer_mobile': so.partner_id.mobile,
@@ -83,8 +90,14 @@ class CustomerSalesperonsReport(models.TransientModel):
                             'inv_total': invoice_ids.amount_total if invoice_ids else 0,
                             'amount_residual': invoice_ids.amount_residual if invoice_ids else 0,
                         })
+
                 elif is_individual and customer.is_company == False:
-                    if not invoice_ids or invoice_ids.amount_residual != 0:
+                    # if self.is_amount_due:
+                    #     if not invoice_ids or invoice_ids.amount_residual != 0:
+                    #         passed = True
+                    # else:
+                    #     passed = True
+                    # if passed:
                         data_list_person.append({
                             'customer': so.partner_id.display_name,
                             'customer_mobile': so.partner_id.mobile,
