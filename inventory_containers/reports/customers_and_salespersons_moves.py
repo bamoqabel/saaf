@@ -71,12 +71,12 @@ class CustomerSalesperonsReport(models.TransientModel):
                         delivery_date += str(picking.scheduled_date.date()) + ' , '
 
                 if is_company and customer.is_company == True:
-                    # if self.is_amount_due :
-                    #     if not invoice_ids or invoice_ids.amount_residual != 0:
-                    #         passed = True
-                    # else:
-                    #     passed = True
-                    # if passed :
+                    if self.is_amount_due :
+                        if not invoice_ids or invoice_ids.amount_residual != 0:
+                            passed = True
+                    else:
+                        passed = True
+                    if passed :
                         data_list_company.append({
                             'customer': so.partner_id.display_name,
                             'customer_mobile': so.partner_id.mobile,
@@ -92,12 +92,12 @@ class CustomerSalesperonsReport(models.TransientModel):
                         })
 
                 elif is_individual and customer.is_company == False:
-                    # if self.is_amount_due:
-                    #     if not invoice_ids or invoice_ids.amount_residual != 0:
-                    #         passed = True
-                    # else:
-                    #     passed = True
-                    # if passed:
+                    if self.is_amount_due:
+                        if not invoice_ids or invoice_ids.amount_residual != 0:
+                            passed = True
+                    else:
+                        passed = True
+                    if passed:
                         data_list_person.append({
                             'customer': so.partner_id.display_name,
                             'customer_mobile': so.partner_id.mobile,
