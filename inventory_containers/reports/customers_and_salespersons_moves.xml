@@ -79,10 +79,11 @@
                                 <th class="text-left" style="width:15%;font-size:13px;">العميل</th>
                                 <th class="text-left" style="width:8%;font-size:13px;">رقم العميل</th>
                                 <th class="text-left" style="width:7%;font-size:13px;">رقم الطلب</th>
-                                <th class="text-left" style="width:5%;font-size:13px;">عدد الحاويات</th>
-                                <th class="text-left" style="width:20%;font-size:13px;">رقم الحاوية</th>
-                                <th class="text-left" style="width:15%;font-size:13px;">رقم كرت الخدمة</th>
-                                <th class="text-left" style="width:15%;font-size:13px;">الموقع</th>
+                                <th class="text-left" style="width:3%;font-size:13px;">عدد الحاويات</th>
+                                <th class="text-left" style="width:18%;font-size:13px;">رقم الحاوية</th>
+                                <th class="text-left" style="width:12%;font-size:13px;">رقم كرت الخدمة</th>
+                                <th class="text-left" style="width:12%;font-size:13px;">الموقع</th>
+                                <th class="text-left" style="width:11%;font-size:13px;">تاريخ التوصيل</th>
                                 <th class="text-left" style="width:5%;font-size:13px;">المبلغ</th>
                                 <th class="text-left" style="width:5%;font-size:13px;">مبلغ الفاتورة</th>
                                 <th class="text-left" style="width:5%;font-size:13px;">السداد</th>
@@ -90,7 +91,7 @@
                         </thead>
                         <tbody class="sale_tbody">
                             <tr t-if="data_list_person" style="border: 2px solid;;">
-                                <td colspan="10" scope="colgroup" style="font-weight:bold;text-align:center;border-top: 2px solid;">أفراد</td>
+                                <td colspan="11" scope="colgroup" style="font-weight:bold;text-align:center;border-top: 2px solid;">أفراد</td>
                             </tr>
                             <tr t-foreach="data_list_person" t-as="line">
                                 <td style="font-weight:bold;">
@@ -115,6 +116,9 @@
                                     <t t-esc="line['delivery_addresses']"/>
                                 </td>
                                 <td style="font-weight:bold;">
+                                    <t t-esc="line['delivery_date']"/>
+                                </td>
+                                <td style="font-weight:bold;">
                                     <t t-esc="line['so_total']"/>
                                     <t t-set="counter_so_total" t-value="line['so_total'] + counter_so_total"/>
                                 </td>
@@ -128,7 +132,7 @@
                                 </td>
                             </tr>
                             <tr t-if="data_list_company" style="border: 2px solid;">
-                                <td colspan="10" scope="colgroup" style="font-weight:bold;text-align:center;border-top: 2px solid;">شركات</td>
+                                <td colspan="11" scope="colgroup" style="font-weight:bold;text-align:center;border-top: 2px solid;">شركات</td>
                             </tr>
                             <tr t-foreach="data_list_company" t-as="line">
                                 <td style="font-weight:bold;">
@@ -153,6 +157,9 @@
                                     <t t-esc="line['delivery_addresses']"/>
                                 </td>
                                 <td style="font-weight:bold;">
+                                    <t t-esc="line['delivery_date']"/>
+                                </td>
+                                <td style="font-weight:bold;">
                                     <t t-esc="line['so_total']"/>
                                     <t t-set="counter_so_total" t-value="line['so_total'] + counter_so_total"/>
                                 </td>
@@ -166,7 +173,7 @@
                                 </td>
                             </tr>
                             <tr>
-                                <td style="border: 2px solid;font-weight:bold;font-size:16px;text-align:center;" colspan="7" scope="colgroup">إجمالي</td>
+                                <td style="border: 2px solid;font-weight:bold;font-size:16px;text-align:center;" colspan="8" scope="colgroup">إجمالي</td>
                                 <td style="border: 2px solid;font-weight:bold;font-size:16px;" colspan="1" scope="colgroup"><span t-esc="round(counter_so_total,2)"/></td>
                                 <td style="border: 2px solid;font-weight:bold;font-size:16px;" colspan="1" scope="colgroup"><span t-esc="round(counter_inv_total,2)"/></td>
                                 <td style="border: 2px solid;font-weight:bold;font-size:16px;" colspan="1" scope="colgroup"><span t-esc="round(counter_amount_residual,2)"/></td>

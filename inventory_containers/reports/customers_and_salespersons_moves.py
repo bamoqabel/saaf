@@ -53,7 +53,7 @@ class CustomerSalesperonsReport(models.TransientModel):
             so_records = self.env['sale.order'].sudo().search(so_domain).filtered(lambda so_rec: sum(so_line.product_uom_qty for so_line in so_rec.order_line) > 0)
             for so in so_records:
                 container_counter = 0.0
-                containers ,service_numbers,delivery_addresses = '','',''
+                containers ,service_numbers,delivery_addresses,delivery_date = '','','',''
                 invoice_ids = self.env['account.move'].sudo().search([('id','in',so.invoice_ids.ids)],limit=1).filtered(lambda move : move.state == 'posted')
                 picking_ids = self.env['stock.picking'].sudo().search([('id','in',so.picking_ids.ids),])
                 for picking in picking_ids:
@@ -65,32 +65,39 @@ class CustomerSalesperonsReport(models.TransientModel):
                         service_numbers += picking.service_number + ' , '
                     if picking.partner_id:
                         delivery_addresses += picking.partner_id.display_name + ' , '
+                    if picking.scheduled_date:
+                        delivery_date += str(picking.scheduled_date.date()) + ' , '
+
                 if is_company and customer.is_company == True:
-                    data_list_company.append({
-                        'customer': so.partner_id.display_name,
-                        'customer_mobile': so.partner_id.mobile,
-                        'so_number': so.name,
-                        'container_counter': container_counter,
-                        'containers': containers,
-                        'service_numbers': service_numbers,
-                        'delivery_addresses': delivery_addresses,
-                        'so_total': so.amount_total,
-                        'inv_total': invoice_ids.amount_total if invoice_ids else 0,
-                        'amount_residual': invoice_ids.amount_residual if invoice_ids else 0,
-                    })
+                    if not invoice_ids or invoice_ids.amount_residual != 0:
+                        data_list_company.append({
+                            'customer': so.partner_id.display_name,
+                            'customer_mobile': so.partner_id.mobile,
+                            'so_number': so.name,
+                            'container_counter': container_counter,
+                            'containers': containers,
+                            'service_numbers': service_numbers,
+                            'delivery_addresses': delivery_addresses,
+                            'delivery_date': delivery_date,
+                            'so_total': so.amount_total,
+                            'inv_total': invoice_ids.amount_total if invoice_ids else 0,
+                            'amount_residual': invoice_ids.amount_residual if invoice_ids else 0,
+                        })
                 elif is_individual and customer.is_company == False:
-                    data_list_person.append({
-                        'customer': so.partner_id.display_name,
-                        'customer_mobile': so.partner_id.mobile,
-                        'so_number': so.name,
-                        'container_counter': container_counter,
-                        'containers': containers,
-                        'service_numbers': service_numbers,
-                        'delivery_addresses': delivery_addresses,
-                        'so_total': so.amount_total,
-                        'inv_total': invoice_ids.amount_total if invoice_ids else 0,
-                        'amount_residual': invoice_ids.amount_residual if invoice_ids else 0,
-                    })
+                    if not invoice_ids or invoice_ids.amount_residual != 0:
+                        data_list_person.append({
+                            'customer': so.partner_id.display_name,
+                            'customer_mobile': so.partner_id.mobile,
+                            'so_number': so.name,
+                            'container_counter': container_counter,
+                            'containers': containers,
+                            'service_numbers': service_numbers,
+                            'delivery_addresses': delivery_addresses,
+                            'delivery_date': delivery_date,
+                            'so_total': so.amount_total,
+                            'inv_total': invoice_ids.amount_total if invoice_ids else 0,
+                            'amount_residual': invoice_ids.amount_residual if invoice_ids else 0,
+                        })
             so_domain.remove(('partner_id', '=', customer.id))
 
 
