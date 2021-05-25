@@ -88,7 +88,7 @@ class CustomerSalesperonsReport(models.TransientModel):
                             'delivery_date': delivery_date,
                             'so_total': so.amount_total,
                             'inv_total': invoice_ids.amount_total if invoice_ids else 0,
-                            'amount_residual': invoice_ids.amount_residual if invoice_ids else 0,
+                            'amount_residual': invoice_ids.amount_residual if invoice_ids else so.amount_total,
                         })
 
                 elif is_individual and customer.is_company == False:
@@ -109,7 +109,7 @@ class CustomerSalesperonsReport(models.TransientModel):
                             'delivery_date': delivery_date,
                             'so_total': so.amount_total,
                             'inv_total': invoice_ids.amount_total if invoice_ids else 0,
-                            'amount_residual': invoice_ids.amount_residual if invoice_ids else 0,
+                            'amount_residual': invoice_ids.amount_residual if invoice_ids else so.amount_total,
                         })
             so_domain.remove(('partner_id', '=', customer.id))
 
