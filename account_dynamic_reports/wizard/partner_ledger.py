@@ -457,7 +457,8 @@ class InsPartnerLedger(models.TransientModel):
                     l.currency_id,
                     l.amount_currency,
                     --l.ref AS lref,
-                    l.name AS lname,
+                    d.name AS delivery_address,
+                    m.ref AS ref,
                     m.id AS move_id,
                     m.name AS move_name,
                     c.symbol AS currency_symbol,
@@ -481,9 +482,10 @@ class InsPartnerLedger(models.TransientModel):
                 LEFT JOIN res_currency c ON (l.currency_id=c.id)
                 LEFT JOIN res_currency cc ON (l.company_currency_id=cc.id)
                 LEFT JOIN res_partner p ON (l.partner_id=p.id)
+                LEFT JOIN res_partner d ON (m.partner_shipping_id=d.id)
                 JOIN account_journal j ON (l.journal_id=j.id)
                 WHERE %s
-                GROUP BY l.id, l.partner_id, a.name, l.account_id, l.date, j.code, l.currency_id, l.amount_currency, l.name, m.id, m.name, c.rounding, cc.id, cc.rounding, cc.position, c.position, c.symbol, cc.symbol, p.name
+                GROUP BY l.id, l.partner_id, a.name, l.account_id, l.date, j.code, l.currency_id, l.amount_currency, l.name, m.id, m.name, c.rounding, cc.id, cc.rounding, cc.position, c.position, c.symbol, cc.symbol, p.name,d.name,m.ref
                 ORDER BY %s
                 OFFSET %s ROWS
                 FETCH FIRST %s ROWS ONLY
@@ -610,7 +612,8 @@ class InsPartnerLedger(models.TransientModel):
                     j.code AS lcode,
                     a.name AS account_name,
                     m.name AS move_name,
-                    l.name AS lname,
+                    d.name AS delivery_address,
+                    m.ref AS ref,
                     COALESCE(l.debit,0) AS debit,
                     COALESCE(l.credit,0) AS credit,
                     COALESCE(l.balance,0) AS balance,
@@ -623,9 +626,10 @@ class InsPartnerLedger(models.TransientModel):
                 LEFT JOIN res_currency c ON (l.currency_id=c.id)
                 LEFT JOIN res_currency cc ON (l.company_currency_id=cc.id)
                 LEFT JOIN res_partner p ON (l.partner_id=p.id)
+                LEFT JOIN res_partner d ON (m.partner_shipping_id=d.id)
                 JOIN account_journal j ON (l.journal_id=j.id)
                 WHERE %s
-                --GROUP BY l.id, l.account_id, l.date, j.code, l.currency_id, l.amount_currency, l.ref, l.name, m.id, m.name, c.rounding, cc.rounding, cc.position, c.position, c.symbol, cc.symbol, p.name
+                --GROUP BY l.id, l.account_id, l.date, j.code, l.currency_id, l.amount_currency, l.ref, l.name, m.id, m.name, c.rounding, cc.rounding, cc.position, c.position, c.symbol, cc.symbol, p.name,d.name,m.ref
                 ORDER BY %s
             ''') % (WHERE_CURRENT, ORDER_BY_CURRENT)
             cr.execute(sql)

@@ -743,7 +743,8 @@ Options:
 <th>JRNL</th>
 <th>Account</th>
 <th>Move</th>
-<th>Entry Label</th>
+<th style="width: 12%;">Delivery Address</th>
+<th style="width: 15%;">Reference</th>
 <th class="amt-head">Debit</th>
 <th class="amt-head">Credit</th>
 <th class="amt-head">Balance</th>
@@ -786,7 +787,8 @@ View Source move
 <td><t t-esc="account_line.lcode"/></td>
 <td><t t-esc="account_line.account_name"/></td>
 <td t-att-style="style"><t t-esc="account_line.move_name"/></td>
-<td t-att-style="style"><t t-esc="account_line.lname"/></td>
+<td style="width: 12%;"><t t-esc="account_line.delivery_address"/></td>
+<td style="width: 15%;"><t t-esc="account_line.ref"/></td>
 <td t-att-style="style" class="amt"><t t-raw="account_line.debit"/></td>
 <td t-att-style="style" class="amt"><t t-raw="account_line.credit"/></td>
 <td t-att-style="style" class="amt"><t t-raw="account_line.balance"/></td>
