@@ -1,17 +1,16 @@
 # -*- coding: utf-8 -*-
 {
-    'name': "saaf_account_dynamic_reports",
+    'name': "Saaf Account Dynamic Reports",
 
     'summary': """
-        Short (1 phrase/line) summary of the module's purpose, used as
-        subtitle on modules listing or apps.openerp.com""",
+        Saaf Account Dynamic Reports""",
 
     'description': """
-        Long description of module's purpose
+        Saaf Account Dynamic Reports
     """,
 
-    'author': "My Company",
-    'website': "http://www.yourcompany.com",
+    'author': "islam megger",
+    'website': "http://projomania.com",
 
     # Categories can be used to filter modules in modules listing
     # Check https://github.com/odoo/odoo/blob/13.0/odoo/addons/base/data/ir_module_category_data.xml
