@@ -189,13 +189,15 @@ class InsPartnerLedgerXlsx(models.AbstractModel):
             #                         self.format_header)
             self.sheet.write_string(self.row_pos, 3, _('Move'),
                                     self.format_header)
-            self.sheet.write_string(self.row_pos, 4, _('Entry Label'),
+            self.sheet.write_string(self.row_pos, 4, _('Delivery Address'),
                                     self.format_header)
-            self.sheet.write_string(self.row_pos, 5, _('Debit'),
+            self.sheet.write_string(self.row_pos, 5, _('Reference'),
                                     self.format_header)
-            self.sheet.write_string(self.row_pos, 6, _('Credit'),
+            self.sheet.write_string(self.row_pos, 6, _('Debit'),
                                     self.format_header)
-            self.sheet.write_string(self.row_pos, 7, _('Balance'),
+            self.sheet.write_string(self.row_pos, 7, _('Credit'),
+                                    self.format_header)
+            self.sheet.write_string(self.row_pos, 8, _('Balance'),
                                     self.format_header)
         else:
             self.sheet.merge_range(self.row_pos, 0, self.row_pos, 4, _('Partner'), self.format_header)
@@ -242,13 +244,15 @@ class InsPartnerLedgerXlsx(models.AbstractModel):
                             #                         self.line_header_light)
                             self.sheet.write_string(self.row_pos, 3, sub_line.get('move_name'),
                                                     self.line_header_light)
-                            self.sheet.write_string(self.row_pos, 4, sub_line.get('lname') or '',
-                                                    self.line_header_light)
-                            self.sheet.write_number(self.row_pos, 5,
-                                                    float(sub_line.get('debit')),self.line_header_light)
+                            self.sheet.write_string(self.row_pos, 4, sub_line.get('delivery_address') if sub_line.get('delivery_address') else '/',
+                                                    self.format_header)
+                            self.sheet.write_string(self.row_pos, 5, sub_line.get('ref') if sub_line.get('ref') else '/',
+                                                    self.format_header)
                             self.sheet.write_number(self.row_pos, 6,
-                                                    float(sub_line.get('credit')),self.line_header_light)
+                                                    float(sub_line.get('debit')),self.line_header_light)
                             self.sheet.write_number(self.row_pos, 7,
+                                                    float(sub_line.get('credit')),self.line_header_light)
+                            self.sheet.write_number(self.row_pos, 8,
                                                     float(sub_line.get('balance')),self.line_header_light)
                         else: # Ending Balance
                             self.row_pos += 1

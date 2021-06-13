@@ -95,6 +95,7 @@
                                         <th style="text-align:left;">Journal</th>
                                         <th style="text-align:left;">Account</th>
                                         <th style="text-align:left;">Move</th>
+                                        <th style="text-align:left;">Delivery Address</th>
                                         <th style="text-align:left;">Reference</th>
                                         <th style="text-align:right;padding-bottom:10px;">Debit</th>
                                         <th style="text-align:right">Credit</th>
@@ -108,6 +109,7 @@
                                         <span style="color: white;" t-esc="'..'"/>
                                         <span t-esc="Ledger_data[line]['name']"/>
                                     </td>
+                                    <td class="text-right"/>
                                     <td class="text-right">
                                         <span t-esc="Ledger_data[line]['debit']" t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/>
                                     </td>
@@ -125,6 +127,7 @@
                                             <td colspan="5" class="text-right">
                                                 <span>Initial Balance</span>
                                             </td>
+                                            <td class="text-right"/>
                                             <td class="text-right">
                                                 <span t-esc="sub_line['debit']" t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/>
                                             </td>
@@ -143,7 +146,8 @@
                                                 <td><t t-esc="sub_line.get('lcode')"/></td>
                                                 <td><t t-esc="sub_line.get('account_name')"/></td>
                                                 <td><t t-esc="sub_line.get('move_name')"/></td>
-                                                <td style="width:30%;"><t t-esc="sub_line.get('lname')"/></td>
+                                                <td style="width:30%;"><t t-esc="sub_line.get('delivery_address')"/></td>
+                                                <td style="width:30%;"><t t-esc="sub_line.get('ref')"/></td>
                                                 <td class="text-right"><t t-esc="sub_line.get('debit')" t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/></td>
                                                 <td class="text-right"><t t-esc="sub_line.get('credit')" t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/></td>
                                                 <td class="text-right"><t t-esc="sub_line.get('balance')" t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/></td>
