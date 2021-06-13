@@ -10,6 +10,46 @@ FETCH_RANGE = 2000
 class InsPartnerLedger(models.TransientModel):
     _inherit = "ins.partner.ledger"
 
+    def build_where_clause(self, data=False):
+        if not data:
+            data = self.get_filters(default_filters={})
+
+        if data:
+
+            WHERE = '(1=1)'
+
+            type = ('receivable', 'payable')
+            if self.type:
+                type = tuple([self.type, 'none'])
+
+            WHERE += ' AND ty.type IN %s' % str(type)
+
+            if data.get('reconciled') == 'reconciled':
+                WHERE += ' AND l.amount_residual = 0'
+            if data.get('reconciled') == 'unreconciled':
+                WHERE += ' AND l.amount_residual != 0'
+
+            if data.get('journal_ids', []):
+                WHERE += ' AND j.id IN %s' % str(tuple(data.get('journal_ids')) + tuple([0]))
+
+            if data.get('account_ids', []):
+                WHERE += ' AND a.id IN %s' % str(tuple(data.get('account_ids')) + tuple([0]))
+
+            if data.get('partner_ids', []):
+                WHERE += ' AND p.id IN %s' % str(tuple(data.get('partner_ids')) + tuple([0]))
+
+            if data.get('company_id', False):
+                WHERE += ' AND l.company_id = %s' % data.get('company_id')
+
+            if data.get('target_moves') == 'posted_only':
+                WHERE += " AND m.state = 'posted'"
+            elif data and data.get('target_moves') == 'all_entries':
+                WHERE += " AND m.state != 'cancel'"
+
+            return WHERE
+
+
+
     def build_detailed_move_lines(self, offset=0, partner=0, fetch_range=FETCH_RANGE):
         '''
         It is used for showing detailed move lines as sub lines. It is defered loading compatable
