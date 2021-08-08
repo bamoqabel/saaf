@@ -42,7 +42,7 @@ class InsPartnerLedgerXlsx(models.AbstractModel):
         if acc_lines:
             for line in acc_lines:
                 self.row_pos += 1
-                self.sheet.merge_range(self.row_pos, 0, self.row_pos, 4, acc_lines[line].get('name'), self.line_header)
+                self.sheet.merge_range(self.row_pos, 0, self.row_pos, 4, acc_lines[line].get('name') +'   ' + (acc_lines[line].get('mobile') if acc_lines[line].get('mobile',False) else '/'), self.line_header)
                 self.sheet.write_number(self.row_pos, 5, float(acc_lines[line].get('debit')), self.line_header)
                 self.sheet.write_number(self.row_pos, 6, float(acc_lines[line].get('credit')), self.line_header)
                 self.sheet.write_number(self.row_pos, 7, float(acc_lines[line].get('balance')), self.line_header)
